@@ -5,6 +5,28 @@
 - Download images from the CLI
 - We are using [Pexels](https://www.pexels.com/) for the images
 
+## 🙊 Token
+
+- For this application to work we need a API_KEY from Pexels, we are going with the simple way and we create a txt with the token and read from it.
+
+- We can also include the token manually in each request since is asked at first, but if you want to leave it blank we use it from this file
+
+## 🏁 Prerequisites
+
+- An account from [Pexels](https://www.pexels.com/)
+- Unix system
+- Python 3
+
+## 🏃 Run the script
+
+```bash
+# First we give permissions to the script
+$ chmod +x ./run.sh
+
+# Then we populate the token.example.txt and copy it
+$ cp token.example.txt token.txt
+```
+
 ## 🧰 Stack
 
 - Bash
@@ -36,3 +58,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+```
+
+```
