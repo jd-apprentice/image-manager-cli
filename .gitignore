@@ -3,3 +3,6 @@ response.json
 
 # Token
 token.txt
+
+# Settings
+.vscode

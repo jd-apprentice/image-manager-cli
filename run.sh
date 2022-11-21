@@ -85,6 +85,16 @@ infoMessages
 downloadImages
 writeSpace
 
+## We run the python script
+echo "These are your images: "
+echo " "
+chmod +x main.py
+./main.py
+
+## Clean the response object
+rm -rf response.json
+
 ## Exit
+echo " "
 echo "Exiting..."
 exit 1
