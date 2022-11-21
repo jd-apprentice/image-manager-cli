@@ -92,7 +92,7 @@ chmod +x main.py
 ./main.py
 
 ## Clean the response object
-rm -rf response.json
+rm response.json
 
 ## Exit
 echo " "
