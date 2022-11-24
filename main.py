@@ -9,7 +9,10 @@ def read_json(path):
 # Function to print the photos
 def print_photos_url(json_data):
     for photo in json_data['photos']:
-        print(photo['src']['original'])
+        try:
+            print(photo['src']['original'])
+        except:
+            print("Could not find images, please try again")
 
 # We execute the script
 if __name__ == "__main__":

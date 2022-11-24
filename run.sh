@@ -1,10 +1,12 @@
 #!/bin/bash
 
 ## Initial variables
+base_url=https://api.pexels.com/v1
 url=https://www.pexels.com/
 key=https://www.pexels.com/api/new/
 pexels_file=token.txt
-pexels_query=nature
+pexels_query=wallpaper
+pexels_amount=1
 pexels_token=
 
 ## Read token
@@ -23,12 +25,11 @@ isNumberInput() {
   until [[ $images == +([0-9]) ]]; do
     read -p "
   How many images do you want?
-  - Default is 1 
+  - Default is $pexels_amount
   - Only enter numbers
   - 1-10 images per request
 -> " images
   done
-  writeSpace
 }
 
 isGreaterThan10() {
@@ -39,21 +40,12 @@ isGreaterThan10() {
   writeSpace
 }
 
-readTokenInput() {
-  read -sp "
-Enter your pexels api token
-You can create your account here $url
-After that you can visit $key
--> " token
-  writeSpace
-}
-
 readQueryInput() {
   read -p "
-  - Default is nature
-  - Options are Cars, Tigers, People, Food, Etc
-  - Or it could be something specific like Group of people working
-  -> " query
+- Default is $pexels_query
+- Options are Cars, Tigers, People, Food, Etc
+- Or it could be something specific like Group of people working
+-> " query
 }
 
 infoMessages() {
@@ -64,37 +56,55 @@ infoMessages() {
 
 downloadImages() {
   curl -H "Authorization: $api_key" \
-    "https://api.pexels.com/v1/search?query=$default_query&per_page=$default_amount&" | python3 -m json.tool >>response.json
+    "$base_url/search?query=$default_query&per_page=$default_amount" | python3 -m json.tool >>response.json
 }
 
-## Retrieve amount of images
-isNumberInput
-isGreaterThan10
-default_amount=${images:-1}
+readTokenInput() {
+  read -p "
+Enter your pexels api token
+You can create your account here $url
+After that you can visit $key
+-> " token && echo $token > token.txt
+  writeSpace
+}
+
+runApplication() {
+  if [[ -e "token.txt" ]]; then
+
+    ## Retrieve amount of images
+    isNumberInput
+    isGreaterThan10
+    default_amount=${images:-$pexels_amount}
+
+    ## Query
+    readQueryInput
+    default_query=${query:-$pexels_query}
+
+    ## Info messages and download images
+    infoMessages
+    downloadImages
+    writeSpace
+
+    ## We run the python script
+    chmod +x main.py
+    ./main.py
+
+    ## Clean the response object
+    rm response.json
+
+  elif ! [[ -e "token.txt" ]]; then
+
+    readTokenInput
+    runApplication
+
+  fi
+}
 
 ## Token
-readTokenInput
-api_key=${token:-$pexels_token}
+api_key=${pexels_token:-$token}
 
-## Query
-readQueryInput
-default_query=${query:-$pexels_query}
-
-## Info messages and download images
-infoMessages
-downloadImages
-writeSpace
-
-## We run the python script
-echo "These are your images: "
-echo " "
-chmod +x main.py
-./main.py
-
-## Clean the response object
-rm response.json
+## Run the application
+runApplication
 
 ## Exit
-echo " "
-echo "Exiting..."
 exit 1
